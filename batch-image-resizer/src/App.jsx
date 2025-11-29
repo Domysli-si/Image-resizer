@@ -238,7 +238,7 @@ function App() {
       </main>
       
       <footer className="app-footer">
-        <p>Created by [Your Name] • School Project • 2024</p>
+        <p>Created by Samuel Majer • School Project • 2025</p>
       </footer>
     </div>
   );

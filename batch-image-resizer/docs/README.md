@@ -1,10 +1,9 @@
 # Batch Image Resizer
 
-**Autor:** [Tvoje Jméno]  
-**Škola:** [Název školy]  
-**Předmět:** Programování (PV)  
-**Datum:** 2024  
-**Kontakt:** [tvůj email]
+**Autor:** Samuel Majer
+**Škola:** Střední průmyslová škola elektrotechnická, Praha 2, Ječná 30
+**Předmět:** Programování (PV) 
+**Datum:** 2025
 
 ---
 
@@ -293,11 +292,10 @@ Tento projekt je vytvořen jako školní projekt a je volně dostupný pro vzdě
 ## 👤 Autor
 
 **[Tvoje Jméno]**
-- Email: [tvůj email]
-- GitHub: [tvůj GitHub profil]
-- Škola: [název školy]
+- GitHub: Domysli-si
+- Škola: Střední průmyslová škola elektrotechnická, Praha 2, Ječná 30
 
-**Vytvořeno:** 2024  
+**Vytvořeno:** 2025
 **Předmět:** Programování (PV)  
 **Typ:** Školní projekt - Paralelizace
 
