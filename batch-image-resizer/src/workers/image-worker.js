@@ -78,64 +78,54 @@ self.onmessage = async function(e) {
  * Změna velikosti obrázku pomocí Canvas API
  */
 async function resizeImage(blob, targetWidth, targetHeight, mode, quality) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(blob);
+  try {
+    // Použij createImageBitmap místo Image (funguje ve workerech)
+    const imageBitmap = await createImageBitmap(blob);
     
-    img.onload = function() {
-      try {
-        // Vypočítej rozměry podle módu
-        const dimensions = calculateDimensions(
-          img.width,
-          img.height,
-          targetWidth,
-          targetHeight,
-          mode
-        );
-        
-        // Vytvoř canvas
-        const canvas = new OffscreenCanvas(targetWidth, targetHeight);
-        const ctx = canvas.getContext('2d');
-        
-        // Vyplň pozadí bílou (pro transparentní obrázky)
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, targetWidth, targetHeight);
-        
-        // Nakresli obrázek
-        ctx.drawImage(
-          img,
-          dimensions.sx,
-          dimensions.sy,
-          dimensions.sWidth,
-          dimensions.sHeight,
-          dimensions.dx,
-          dimensions.dy,
-          dimensions.dWidth,
-          dimensions.dHeight
-        );
-        
-        // Konvertuj na Blob (JPEG)
-        canvas.convertToBlob({
-          type: 'image/jpeg',
-          quality: quality
-        }).then(resizedBlob => {
-          URL.revokeObjectURL(url);
-          resolve(resizedBlob);
-        });
-        
-      } catch (error) {
-        URL.revokeObjectURL(url);
-        reject(error);
-      }
-    };
+    // Vypočítej rozměry podle módu
+    const dimensions = calculateDimensions(
+      imageBitmap.width,
+      imageBitmap.height,
+      targetWidth,
+      targetHeight,
+      mode
+    );
     
-    img.onerror = function() {
-      URL.revokeObjectURL(url);
-      reject(new Error('Failed to load image'));
-    };
+    // Vytvoř canvas
+    const canvas = new OffscreenCanvas(targetWidth, targetHeight);
+    const ctx = canvas.getContext('2d');
     
-    img.src = url;
-  });
+    // Vyplň pozadí bílou (pro transparentní obrázky)
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, targetWidth, targetHeight);
+    
+    // Nakresli obrázek
+    ctx.drawImage(
+      imageBitmap,
+      dimensions.sx,
+      dimensions.sy,
+      dimensions.sWidth,
+      dimensions.sHeight,
+      dimensions.dx,
+      dimensions.dy,
+      dimensions.dWidth,
+      dimensions.dHeight
+    );
+    
+    // Zavři ImageBitmap (uvolní paměť)
+    imageBitmap.close();
+    
+    // Konvertuj na Blob (JPEG)
+    const resizedBlob = await canvas.convertToBlob({
+      type: 'image/jpeg',
+      quality: quality
+    });
+    
+    return resizedBlob;
+    
+  } catch (error) {
+    throw new Error(`Failed to resize image: ${error.message}`);
+  }
 }
 
 /**
